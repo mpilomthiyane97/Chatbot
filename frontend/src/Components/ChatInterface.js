@@ -25,7 +25,7 @@ const ChatInterface = () => {
     // Add token to headers for authenticated requests
     const fetchMessages = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/chat/history', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat/history`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ const ChatInterface = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/chat', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -126,7 +126,7 @@ const ChatInterface = () => {
         navigate('/login');
         return;
       }
-      await fetch('http://localhost:5000/api/chat/clear', {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat/clear`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -169,7 +169,7 @@ const ChatInterface = () => {
       // Create and play audio sequentially
       for (let i = 0; i < audioUrls.length; i++) {
         const audioUrl = audioUrls[i];
-        const audio = new Audio(`http://localhost:5000/proxy-tts?url=${encodeURIComponent(audioUrl)}`);
+        const audio = new Audio(`${process.env.REACT_APP_BACKEND_URL}/proxy-tts?url=${encodeURIComponent(audioUrl)}`);
         
         setCurrentAudio(audio);
         setAudioStates(prev => ({ ...prev, [messageId]: true }));

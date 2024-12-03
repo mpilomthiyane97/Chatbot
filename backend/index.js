@@ -11,7 +11,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://chatbot-hnon.netlify.app", "https://*.netlify.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -49,8 +49,16 @@ mongoose.connect(process.env.MONGO_URI)
   });
 
 // Define routes
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Welcome to CurioBot API',
+    status: 'Server is running'
+  });
+});
+
+// API routes
+app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api', chatRoutes);
 
 // Proxy route to fetch Google Translate TTS audio
 app.get('/proxy-tts', async (req, res) => {
@@ -73,17 +81,20 @@ app.get('/proxy-tts', async (req, res) => {
   }
 });
 
-// Error handling for unhandled routes
+// 404 handler for undefined routes
 app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ 
+    error: 'Not Found',
+    message: 'The requested endpoint does not exist'
+  });
 });
 
-// Global error handler
+// Error handler
 app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
+  console.error(err.stack);
   res.status(500).json({ 
-    message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    error: 'Internal Server Error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 

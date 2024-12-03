@@ -11,7 +11,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: ["http://localhost:3000", "https://chatbot-hnon.netlify.app", "https://*.netlify.app"],
+  origin: ["http://localhost:3000", "https://mpilobot.netlify.app"],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],

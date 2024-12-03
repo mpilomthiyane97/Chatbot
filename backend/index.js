@@ -3,7 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const axios = require('axios'); 
 require('dotenv').config();
-const chatRoutes = require('./routes/ChatRoutes');
+const chatRoutes = require('./routes/chatroutes');
 const authRoutes = require('./routes/authRoutes');
 
 // Create an Express application

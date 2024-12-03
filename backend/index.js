@@ -11,11 +11,16 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-  origin: ["http://localhost:3000", "https://mpilobot.netlify.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: true, // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400 // Cache preflight request for 24 hours
 }));
+
+// Handle OPTIONS preflight requests
+app.options('*', cors());
 
 // Body parsing middleware - MUST come before logging middleware
 app.use(express.json());
@@ -24,6 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to log all requests
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  console.log('Origin:', req.headers.origin);
+  console.log('Headers:', req.headers);
   if (req.method === 'POST') {
     console.log('Request body:', JSON.stringify(req.body, null, 2));
   }
